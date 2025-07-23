@@ -42,7 +42,9 @@ export const categoryData = {
             instructions: "Create smooth color transitions across 10-20 color samples within time limits",
             goal: "Train neural pathways to recognize subtle color variations and develop alternative identification strategies",
             image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop",
-            duration: "15-20 min"
+            duration: "15-20 min",
+            component: 'EnhancedColorSortingChallenge',
+            tags: ['color sorting', 'gradient', 'perception', 'fine motor']
           }
         ]
       },
@@ -63,7 +65,9 @@ export const categoryData = {
             instructions: "Complete 15-20 minute gaming sessions with specific eye-tracking targets and fine motor coordination",
             goal: "Force weaker eye usage to strengthen neural pathways and improve visual acuity",
             image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop",
-            duration: "15-20 min"
+            duration: "15-20 min",
+            component: 'MonocularAdventureQuest',
+            tags: ['lazy eye', 'amblyopia', 'monocular', 'visual acuity']
           },
           {
             title: "Contrast Sensitivity Maze",
@@ -71,7 +75,9 @@ export const categoryData = {
             instructions: "Use finger or stylus to trace correct path through maze within time limit",
             goal: "Enhance contrast sensitivity and spatial visual processing",
             image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop",
-            duration: "10-15 min"
+            duration: "10-15 min",
+            component: 'ContrastSensitivityMaze',
+            tags: ['contrast', 'maze', 'perception', 'spatial']
           },
           {
             title: "Binocular Rivalry Resolution",
@@ -79,7 +85,9 @@ export const categoryData = {
             instructions: "Identify hidden objects that only appear when both eyes work together",
             goal: "Promote binocular vision development and reduce suppression",
             image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?w=400&h=300&fit=crop",
-            duration: "12-18 min"
+            duration: "12-18 min",
+            component: 'BinocularRivalryResolution',
+            tags: ['binocular', 'rivalry', 'fusion', 'perception']
           }
         ]
       },

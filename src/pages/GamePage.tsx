@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { categoryData } from "@/data/categoryData";
 
 // Import game components
-import { AdaptiveColorVisionChallenge } from "@/games/EyesAndVision";
+import { AdaptiveColorVisionChallenge, ChromaticAdaptationTrainer, EnhancedColorSortingChallenge, MonocularAdventureQuest, ContrastSensitivityMaze, BinocularRivalryResolution } from "@/games/EyesAndVision";
 
 export function GamePage() {
   const { categoryId, conditionId, gameTitle } = useParams<{ categoryId: string; conditionId: string; gameTitle: string }>();
@@ -88,6 +88,16 @@ export function GamePage() {
     switch (game.title) {
       case "Adaptive Color Vision Challenge":
         return <AdaptiveColorVisionChallenge />;
+      case "Chromatic Adaptation Trainer":
+        return <ChromaticAdaptationTrainer />;
+      case "Enhanced Color Sorting Challenge":
+        return <EnhancedColorSortingChallenge />;
+      case "Monocular Adventure Quest":
+        return <MonocularAdventureQuest />;
+      case "Contrast Sensitivity Maze":
+        return <ContrastSensitivityMaze />;
+      case "Binocular Rivalry Resolution":
+        return <BinocularRivalryResolution />;  
       // Add more cases for other games as they are implemented
       default:
         return (
