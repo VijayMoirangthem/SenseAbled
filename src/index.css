@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SenseAbled Design System - Medical & Therapeutic Theme
+All colors MUST be HSL for accessibility and theming.
+Focus on high contrast, healing colors, and professional medical aesthetic.
+*/
+
+@layer base {
+  :root {
+    /* Core backgrounds - clean white for medical feel */
+    --background: 0 0% 100%;
+    --foreground: 210 24% 16%;
+
+    /* Card and surface colors */
+    --card: 0 0% 100%;
+    --card-foreground: 210 24% 16%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 24% 16%;
+
+    /* Primary - Medical blue for trust and professionalism */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 91% 55%;
+
+    /* Secondary - Complementary blue for therapeutic associations */
+    --secondary: 217 91% 50%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 217 91% 45%;
+
+    /* Therapeutic accent colors */
+    --therapeutic-blue: 202 100% 70%;
+    --therapeutic-cyan: 189 94% 65%;
+    --therapeutic-purple: 262 83% 70%;
+    --therapeutic-orange: 32 95% 65%;
+
+    /* Muted colors for subtle elements */
+    --muted: 210 40% 96%;
+    --muted-foreground: 210 13% 45%;
+
+    /* Accent for highlights and interactive elements */
+    --accent: 210 40% 94%;
+    --accent-foreground: 210 24% 16%;
+
+    /* Status colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 217 91% 50%;
+    --success-foreground: 0 0% 100%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Borders and inputs */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 60%;
+
+    /* Layout and spacing */
+    --radius: 0.75rem;
+    --header-height: 4rem;
+    
+    /* Gradients for therapeutic feel */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--therapeutic-blue)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--therapeutic-cyan)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--secondary) / 0.1));
+    
+    /* Animations and transitions */
+    --transition-therapeutic: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-therapeutic: 0 4px 20px hsl(var(--primary) / 0.15);
+    --shadow-hover: 0 8px 30px hsl(var(--primary) / 0.2);
+  }
+
+  .dark {
+    /* Dark mode - pure black background for high contrast */
+    --background: 0 0% 0%;
+    --foreground: 210 40% 98%;
+
+    --card: 210 24% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 210 24% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Dark mode primary - lighter blue for better contrast */
+    --primary: 217 91% 70%;
+    --primary-foreground: 0 0% 0%;
+    --primary-hover: 217 91% 75%;
+
+    /* Dark mode secondary - lighter blue */
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 0 0% 0%;
+    --secondary-hover: 217 91% 55%;
+
+    /* Dark therapeutic accent colors */
+    --therapeutic-blue: 202 100% 75%;
+    --therapeutic-cyan: 189 94% 70%;
+    --therapeutic-purple: 262 83% 75%;
+    --therapeutic-orange: 32 95% 70%;
+
+    --muted: 210 24% 15%;
+    --muted-foreground: 210 13% 70%;
+
+    --accent: 210 24% 15%;
+    --accent-foreground: 210 40% 98%;
+
+    /* Dark mode status colors */
+    --destructive: 0 84% 70%;
+    --destructive-foreground: 0 0% 0%;
+    --success: 217 91% 60%;
+    --success-foreground: 0 0% 0%;
+    --warning: 43 96% 66%;
+    --warning-foreground: 0 0% 0%;
+
+    --border: 210 24% 20%;
+    --input: 210 24% 20%;
+    --ring: 217 91% 70%;
+    
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--therapeutic-blue)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--therapeutic-cyan)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--secondary) / 0.2));
+    
+    --shadow-therapeutic: 0 4px 20px hsl(var(--primary) / 0.3);
+    --shadow-hover: 0 8px 30px hsl(var(--primary) / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
