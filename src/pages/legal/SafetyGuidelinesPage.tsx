@@ -232,7 +232,7 @@ export function SafetyGuidelinesPage() {
             </div>
 
             <div className="mt-12 text-center text-sm text-muted-foreground">
-              <p>© 2024 SenseAbled. A product of Create Origins.</p>
+              <p>© 2024 SenseAbled. A product of <a href="https://createorigins.vercel.app/" target="_blank" rel="noopener noreferrer">Create Origins</a>.</p>
               <p className="mt-2">Your safety and well-being are our highest priorities.</p>
             </div>
           </div>

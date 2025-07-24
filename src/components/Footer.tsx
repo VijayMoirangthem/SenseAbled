@@ -64,7 +64,7 @@ export function Footer() {
             © 2024 SenseAbled. All rights reserved.
           </div>
           <div className="text-sm text-muted-foreground">
-            A product of <span className="font-semibold text-primary">Create Origins</span>
+            A product of <a href="https://createorigins.vercel.app/" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary">Create Origins</a>
           </div>
         </div>
 

@@ -91,6 +91,9 @@ const ContrastSensitivityMaze: React.FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const gameStartRef = useRef<number>(0);
   const mazeRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null);
+  const [dragStartPlayerPos, setDragStartPlayerPos] = useState<{ row: number; col: number }>({ row: 0, col: 0 });
 
   // Enhanced maze generation with guaranteed solution
   const generateMaze = useCallback((size: number): MazeCell[][] => {
@@ -236,9 +239,16 @@ const ContrastSensitivityMaze: React.FC = () => {
       setFeedback(null);
       gameStartRef.current = Date.now();
       
-      // Focus the maze for keyboard input
+      // Focus the maze for keyboard input and request fullscreen
       setTimeout(() => {
-        mazeRef.current?.focus();
+        if (mazeRef.current) {
+          mazeRef.current.focus();
+          if (mazeRef.current.requestFullscreen) {
+            mazeRef.current.requestFullscreen().catch(err => {
+              console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+          }
+        }
       }, 100);
     } catch (error) {
       console.error('Failed to start game:', error);
@@ -252,6 +262,13 @@ const ContrastSensitivityMaze: React.FC = () => {
       timerRef.current = null;
     }
     
+    // Exit fullscreen if active
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(err => {
+        console.error(`Error attempting to exit full-screen mode: ${err.message} (${err.name})`);
+      });
+    }
+
     setGameState('idle');
     setMaze([]);
     setPlayerPos({ row: 0, col: 0 });
@@ -265,7 +282,7 @@ const ContrastSensitivityMaze: React.FC = () => {
     setTimeLeft(MAZE_CONFIG.TIME_LIMIT);
     setFeedback(null);
     setGameHistory([]);
-  }, []);
+  }, [])
 
   const handleLevelComplete = useCallback(() => {
     const completionTime = (Date.now() - gameStartRef.current) / 1000;
@@ -382,6 +399,76 @@ const ContrastSensitivityMaze: React.FC = () => {
     }
   }, [gameState, handleMove]);
 
+  const handleDragStart = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (gameState !== 'playing') return;
+
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+
+    setIsDragging(true);
+    setDragStartPos({ x: clientX, y: clientY });
+    setDragStartPlayerPos(playerPos);
+  }, [gameState, playerPos]);
+
+  const handleDragMove = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging || gameState !== 'playing' || !dragStartPos) return;
+
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+
+    const dx = clientX - dragStartPos.x;
+    const dy = clientY - dragStartPos.y;
+
+    const threshold = MAZE_CONFIG.CELL_SIZE / 2; // Move if dragged half a cell size
+
+    let newRow = dragStartPlayerPos.row;
+    let newCol = dragStartPlayerPos.col;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // Horizontal movement
+      if (dx > threshold) {
+        newCol = dragStartPlayerPos.col + 1;
+      } else if (dx < -threshold) {
+        newCol = dragStartPlayerPos.col - 1;
+      }
+    } else {
+      // Vertical movement
+      if (dy > threshold) {
+        newRow = dragStartPlayerPos.row + 1;
+      } else if (dy < -threshold) {
+        newRow = dragStartPlayerPos.row - 1;
+      }
+    }
+
+    // Determine direction based on new position relative to dragStartPlayerPos
+    let moved = false;
+    if (newRow < dragStartPlayerPos.row) {
+      handleMove('up');
+      moved = true;
+    } else if (newRow > dragStartPlayerPos.row) {
+      handleMove('down');
+      moved = true;
+    } else if (newCol < dragStartPlayerPos.col) {
+      handleMove('left');
+      moved = true;
+    } else if (newCol > dragStartPlayerPos.col) {
+      handleMove('right');
+      moved = true;
+    }
+
+    // If a move occurred, update dragStartPlayerPos to the current playerPos
+    // This ensures continuous dragging works relative to the new position
+    if (moved) {
+      setDragStartPlayerPos(playerPos);
+      setDragStartPos({ x: clientX, y: clientY }); // Reset drag start position to current for continuous drag
+    }
+  }, [isDragging, gameState, dragStartPos, playerPos, dragStartPlayerPos, handleMove]);
+
+  const handleDragEnd = useCallback(() => {
+    setIsDragging(false);
+    setDragStartPos(null);
+  }, []);
+
   // Timer effect
   useEffect(() => {
     if (gameState === 'playing' && timeLeft > 0) {
@@ -400,13 +487,17 @@ const ContrastSensitivityMaze: React.FC = () => {
     };
   }, [gameState, timeLeft]);
 
-  // Keyboard event listener
+  // Keyboard and drag event listeners
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener('mouseup', handleDragEnd);
+    window.addEventListener('touchend', handleDragEnd);
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('mouseup', handleDragEnd);
+      window.removeEventListener('touchend', handleDragEnd);
     };
-  }, [handleKeyPress]);
+  }, [handleKeyPress, handleDragEnd]);
 
   // Generate colors based on current contrast ratio
   const backgroundColor = generateColorWithContrast(stats.contrastRatio, true);
@@ -418,8 +509,15 @@ const ContrastSensitivityMaze: React.FC = () => {
     return (
       <div
         ref={mazeRef}
-        className="relative focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+        className="relative focus:outline-none focus:ring-2 focus:ring-blue-500 rounded touch-none"
         tabIndex={0}
+        onMouseDown={handleDragStart}
+        onTouchStart={handleDragStart}
+        onMouseMove={handleDragMove}
+        onTouchMove={handleDragMove}
+        onMouseUp={handleDragEnd}
+        onTouchEnd={handleDragEnd}
+        onMouseLeave={handleDragEnd} // End drag if mouse leaves the maze area
         style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${MAZE_CONFIG.SIZE}, ${MAZE_CONFIG.CELL_SIZE}px)`,
